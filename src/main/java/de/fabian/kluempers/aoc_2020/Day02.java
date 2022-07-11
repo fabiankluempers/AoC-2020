@@ -13,7 +13,7 @@ public class Day02 extends Puzzle<Integer, Integer> {
     super(originalInput);
   }
   private record Password(int lower, int upper, char character, String password) {
-    static Pattern inputPattern = Pattern.compile("(\\d+)-(\\d+)\\s(\\w):\\s(\\w+)");
+    private static final Pattern inputPattern = Pattern.compile("(\\d+)-(\\d+)\\s(\\w):\\s(\\w+)");
 
     boolean fulfillsP1Policy() {
       int count = List.ofAll(password.toCharArray()).count(isEqual(character));
