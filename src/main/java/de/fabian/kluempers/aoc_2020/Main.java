@@ -5,9 +5,9 @@ import io.vavr.collection.List;
 public class Main {
   @SuppressWarnings("rawtypes")
   public static void main(String[] args) {
-    int day = 3;
+    int day = 4;
     List<String> input = InputReader.read(String.format("input/Day%02d.txt", day));
-    Puzzle puzzle = new Day03(input);
+    Puzzle puzzle = new Day04(input);
     System.out.println(puzzle.part1());
     System.out.println(puzzle.part2());
   }
