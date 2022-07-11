@@ -1,6 +1,6 @@
 package de.fabian.kluempers.aoc_2020;
 
-import java.util.List;
+import io.vavr.collection.List;
 
 abstract class Puzzle<Part1, Part2> {
   public final List<String> originalInput;
