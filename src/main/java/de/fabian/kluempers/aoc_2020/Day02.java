@@ -24,7 +24,6 @@ public class Day02 extends Puzzle<Integer, Integer> {
       return password.charAt(lower - 1) == character ^ password.charAt(upper - 1) == character;
     }
 
-    @SuppressWarnings("unused")
     static Password parse(String input) {
       Matcher matcher = inputPattern.matcher(input);
       if (matcher.find()) {
