@@ -40,9 +40,9 @@ public class Day04 extends Puzzle<Integer, Integer> {
 
   static boolean validatePassport(Map<String, String> passport) {
     return List.of(
-        validateField(passport, "byr", validateYear(1920, 2002)),
-        validateField(passport, "iyr", validateYear(2010, 2020)),
-        validateField(passport, "eyr", validateYear(2020, 2030)),
+        validateField(passport, "byr", validateYear(from(1920).to(2002))),
+        validateField(passport, "iyr", validateYear(from(2010).to(2020))),
+        validateField(passport, "eyr", validateYear(from(2020).to(2030))),
         validateField(passport, "hgt", Day04::validateHeight),
         validateField(passport, "hcl", stringMatches(HAIR_COLOR_PATTERN)),
         validateField(passport, "ecl", VALID_EYE_COLORS::contains),
@@ -54,9 +54,9 @@ public class Day04 extends Puzzle<Integer, Integer> {
     return map.get(key).map(validationFunc::test).getOrElse(false);
   }
 
-  static Predicate<String> validateYear(int lower, int upper) {
+  static Predicate<String> validateYear(Range range) {
     return year -> Try.of(() -> Integer.parseInt(year))
-        .map(inRange(from(lower).to(upper))::test)
+        .map(inRange(range)::test)
         .getOrElse(false);
   }
 
