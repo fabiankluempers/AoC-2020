@@ -1,12 +1,16 @@
 package de.fabian.kluempers.aoc_2020;
 
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.control.Try;
 
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 import static de.fabian.kluempers.aoc_2020.Functions.*;
@@ -75,14 +79,10 @@ public class Day04 extends Puzzle<Integer, Integer> {
   }
 
   static Map<String, String> toKeyValue(String input) {
-    var matcher = KEY_VALUE_PATTERN.matcher(input);
-    var map = HashMap.<String, String>empty();
-    while (matcher.find()) {
-      var key = matcher.group(1);
-      var value = matcher.group(2);
-      map = map.put(key, value);
-    }
-    return map;
+    return HashMap.ofAll(
+        KEY_VALUE_PATTERN.matcher(input).results(),
+        matchResult -> Tuple.of(matchResult.group(1), matchResult.group(2))
+    );
   }
 
   static List<String> parseToIdentification(List<String> input, List<String> acc) {
