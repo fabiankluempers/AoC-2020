@@ -1,20 +1,18 @@
 package de.fabian.kluempers.aoc_2020;
 
 import io.vavr.Tuple;
-import io.vavr.Tuple2;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.control.Try;
 
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
-import static de.fabian.kluempers.aoc_2020.Functions.*;
-import static de.fabian.kluempers.aoc_2020.Range.*;
+import static de.fabian.kluempers.aoc_2020.Functions.stringAppend;
+import static de.fabian.kluempers.aoc_2020.Functions.stringMatches;
+import static de.fabian.kluempers.aoc_2020.Range.from;
 
 public class Day04 extends Puzzle<Integer, Integer> {
 
@@ -60,7 +58,7 @@ public class Day04 extends Puzzle<Integer, Integer> {
 
   static Predicate<String> validateYear(Range range) {
     return year -> Try.of(() -> Integer.parseInt(year))
-        .map(inRange(range)::test)
+        .map(range::contains)
         .getOrElse(false);
   }
 
@@ -70,8 +68,8 @@ public class Day04 extends Puzzle<Integer, Integer> {
       int value = Integer.parseInt(matcher.group(1));
       String unit = matcher.group(2);
       return switch (unit) {
-        case "cm" -> inRange(VALID_CM_RANGE).test(value);
-        case "in" -> inRange(VALID_INCH_RANGE).test(value);
+        case "cm" -> VALID_CM_RANGE.contains(value);
+        case "in" -> VALID_INCH_RANGE.contains(value);
         default -> false;
       };
     }

@@ -8,8 +8,8 @@ public record Range(int lower, int upper) implements Iterable<Integer> {
     return x -> range.lower <= x && x <= range.upper;
   }
 
-  public static Predicate<Integer> inRangeExclusive(Range range) {
-    return x -> range.lower <= x && x < range.upper;
+  public boolean contains(int value) {
+    return inRange(this).test(value);
   }
 
   public static RangeBuilder from(int lower) {
