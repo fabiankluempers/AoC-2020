@@ -20,14 +20,30 @@ public class Day04 extends Puzzle<Integer, Integer> {
   }
 
   private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([a-z]{3}):(\\S+)");
+
   private static final Pattern HEIGHT_PATTERN = Pattern.compile("(\\d+)(cm|in)");
+
   private static final Pattern HAIR_COLOR_PATTERN = Pattern.compile("#[\\da-f]{6}");
+
   private static final Pattern PASSPORT_ID_PATTERN = Pattern.compile("\\d{9}");
+
   private static final Range VALID_CM_RANGE = from(150).to(193);
+
   private static final Range VALID_INCH_RANGE = from(59).to(76);
+
   private static final Set<String> VALID_EYE_COLORS = Set.of("amb", "blu", "brn", "gry", "grn", "hzl", "oth");
 
-  static boolean validatePassportKeys(String passport) {
+  private static final Predicate<Map<String, String>> isValidPassport = and(
+      validateField("byr", validateYear(from(1920).to(2002))),
+      validateField("iyr", validateYear(from(2010).to(2020))),
+      validateField("eyr", validateYear(from(2020).to(2030))),
+      validateField("hgt", Day04::validateHeight),
+      validateField("hcl", stringMatches(HAIR_COLOR_PATTERN)),
+      validateField("ecl", VALID_EYE_COLORS::contains),
+      validateField("pid", stringMatches(PASSPORT_ID_PATTERN))
+  );
+
+  private static boolean validatePassportKeys(String passport) {
     return List.of(
         "byr",
         "iyr",
@@ -39,29 +55,17 @@ public class Day04 extends Puzzle<Integer, Integer> {
     ).map(passport::contains).reduce(Boolean::logicalAnd);
   }
 
-  static boolean validatePassport(Map<String, String> passport) {
-    return List.of(
-        validateField("byr", validateYear(from(1920).to(2002))),
-        validateField("iyr", validateYear(from(2010).to(2020))),
-        validateField("eyr", validateYear(from(2020).to(2030))),
-        validateField("hgt", Day04::validateHeight),
-        validateField("hcl", stringMatches(HAIR_COLOR_PATTERN)),
-        validateField("ecl", VALID_EYE_COLORS::contains),
-        validateField("pid", stringMatches(PASSPORT_ID_PATTERN))
-    ).map(x -> x.test(passport)).reduce(Boolean::logicalAnd);
-  }
-
-  static Predicate<Map<String, String>> validateField(String key, Predicate<String> validationFunc) {
+  private static Predicate<Map<String, String>> validateField(String key, Predicate<String> validationFunc) {
     return map -> map.get(key).map(validationFunc::test).getOrElse(false);
   }
 
-  static Predicate<String> validateYear(Range range) {
+  private static Predicate<String> validateYear(Range range) {
     return year -> Try.of(() -> Integer.parseInt(year))
         .map(range::contains)
         .getOrElse(false);
   }
 
-  static boolean validateHeight(String height) {
+  private static boolean validateHeight(String height) {
     var matcher = HEIGHT_PATTERN.matcher(height);
     if (matcher.find()) {
       int value = Integer.parseInt(matcher.group(1));
@@ -75,14 +79,14 @@ public class Day04 extends Puzzle<Integer, Integer> {
     return false;
   }
 
-  static Map<String, String> toKeyValue(String input) {
+  private static Map<String, String> toKeyValue(String input) {
     return HashMap.ofAll(
         KEY_VALUE_PATTERN.matcher(input).results(),
         matchResult -> Tuple.of(matchResult.group(1), matchResult.group(2))
     );
   }
 
-  static List<String> parseToIdentification(List<String> input, List<String> acc) {
+  private static List<String> parseToIdentification(List<String> input, List<String> acc) {
     return input.isEmpty() ? acc : parseToIdentification(
         input.dropUntil(String::isBlank).tailOption().getOrElse(List.empty()),
         acc.prepend(input.takeUntil(String::isBlank).map(stringAppend(" ")).reduce(String::concat))
@@ -101,7 +105,7 @@ public class Day04 extends Puzzle<Integer, Integer> {
   public Integer part2() {
     return parseToIdentification(originalInput, List.empty())
         .map(Day04::toKeyValue)
-        .filter(Day04::validatePassport)
+        .filter(isValidPassport)
         .size();
   }
 }

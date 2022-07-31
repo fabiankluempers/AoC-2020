@@ -1,6 +1,7 @@
 package de.fabian.kluempers.aoc_2020;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -10,6 +11,16 @@ public record Functions() {
 
   public static F<String, String> stringAppend(String suffix) {
     return prefix -> prefix + suffix;
+  }
+
+  @SafeVarargs
+  public static <T> Predicate<T> and(Predicate<T> identity, Predicate<T>... predicates) {
+    return Arrays.stream(predicates).reduce(identity, Predicate::and);
+  }
+
+  @SafeVarargs
+  public static <T> Predicate<T> or(Predicate<T> identity, Predicate<T>... predicates) {
+    return Arrays.stream(predicates).reduce(identity, Predicate::or);
   }
 
   public static Predicate<String> stringMatches(Pattern pattern) {
