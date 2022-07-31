@@ -42,18 +42,18 @@ public class Day04 extends Puzzle<Integer, Integer> {
 
   static boolean validatePassport(Map<String, String> passport) {
     return List.of(
-        validateField(passport, "byr", validateYear(from(1920).to(2002))),
-        validateField(passport, "iyr", validateYear(from(2010).to(2020))),
-        validateField(passport, "eyr", validateYear(from(2020).to(2030))),
-        validateField(passport, "hgt", Day04::validateHeight),
-        validateField(passport, "hcl", stringMatches(HAIR_COLOR_PATTERN)),
-        validateField(passport, "ecl", VALID_EYE_COLORS::contains),
-        validateField(passport, "pid", stringMatches(PASSPORT_ID_PATTERN))
-    ).reduce(Boolean::logicalAnd);
+        validateField("byr", validateYear(from(1920).to(2002))),
+        validateField("iyr", validateYear(from(2010).to(2020))),
+        validateField("eyr", validateYear(from(2020).to(2030))),
+        validateField("hgt", Day04::validateHeight),
+        validateField("hcl", stringMatches(HAIR_COLOR_PATTERN)),
+        validateField("ecl", VALID_EYE_COLORS::contains),
+        validateField("pid", stringMatches(PASSPORT_ID_PATTERN))
+    ).map(x -> x.test(passport)).reduce(Boolean::logicalAnd);
   }
 
-  static boolean validateField(Map<String, String> map, String key, Predicate<String> validationFunc) {
-    return map.get(key).map(validationFunc::test).getOrElse(false);
+  static Predicate<Map<String, String>> validateField(String key, Predicate<String> validationFunc) {
+    return map -> map.get(key).map(validationFunc::test).getOrElse(false);
   }
 
   static Predicate<String> validateYear(Range range) {
