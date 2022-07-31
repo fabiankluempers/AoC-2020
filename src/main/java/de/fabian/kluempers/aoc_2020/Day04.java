@@ -10,8 +10,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import static de.fabian.kluempers.aoc_2020.Functions.stringAppend;
-import static de.fabian.kluempers.aoc_2020.Functions.stringMatches;
+import static de.fabian.kluempers.aoc_2020.Functions.*;
 import static de.fabian.kluempers.aoc_2020.Range.from;
 
 public class Day04 extends Puzzle<Integer, Integer> {
@@ -93,8 +92,8 @@ public class Day04 extends Puzzle<Integer, Integer> {
   @Override
   public Integer part1() {
     return parseToIdentification(originalInput, List.empty())
-        .map(Day04::validatePassportKeys)
-        .count(x -> x);
+        .filter(Day04::validatePassportKeys)
+        .size();
   }
 
 
@@ -102,7 +101,7 @@ public class Day04 extends Puzzle<Integer, Integer> {
   public Integer part2() {
     return parseToIdentification(originalInput, List.empty())
         .map(Day04::toKeyValue)
-        .map(Day04::validatePassport)
-        .count(x -> x);
+        .filter(Day04::validatePassport)
+        .size();
   }
 }
