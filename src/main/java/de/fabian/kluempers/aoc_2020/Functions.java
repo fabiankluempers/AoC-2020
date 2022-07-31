@@ -1,9 +1,9 @@
 package de.fabian.kluempers.aoc_2020;
 
+import io.vavr.collection.List;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -13,6 +13,10 @@ public record Functions() {
 
   public static F<String, String> stringAppend(String suffix) {
     return prefix -> prefix + suffix;
+  }
+
+  public static F<String, Boolean> stringContains(String ref) {
+    return string -> string.contains(ref);
   }
 
   public static void check(boolean condition, Supplier<String> lazyMessage) {
@@ -33,13 +37,14 @@ public record Functions() {
     return s -> pattern.matcher(s).matches();
   }
 
-  public static <T> List<T> append(T elem, List<T> list) {
-    List<T> newList = new ArrayList<>(list);
-    newList.add(elem);
-    return newList;
-  }
 
-  public static <T> F<T,F<List<T>, List<T>>> append() {
-    return elem -> list -> append(elem, list);
+  public static List<List<String>> chunkedByBlankLines(List<String> input) {
+    return chunkedByBlankLines(input, List.empty());
+  }
+  private static List<List<String>> chunkedByBlankLines(List<String> input, List<List<String>> acc) {
+    return input.isEmpty() ? acc : chunkedByBlankLines(
+        input.dropUntil(String::isBlank).tailOption().getOrElse(List.empty()),
+        acc.prepend(input.takeUntil(String::isBlank))
+    );
   }
 }

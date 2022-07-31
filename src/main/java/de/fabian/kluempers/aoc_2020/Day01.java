@@ -41,7 +41,10 @@ public class Day01 extends Puzzle {
   }
 
   private static final F<List<Integer>, F<List<Integer>, Stream<List<Integer>>>> expand = input -> list ->
-      input.stream().map(elem -> append(elem, list));
+      input.stream().map(elem -> {
+        list.add(elem);
+        return list;
+      });
 
   private static final F<List<Integer>, Optional<Integer>> filterSolution = list ->
       list.stream()

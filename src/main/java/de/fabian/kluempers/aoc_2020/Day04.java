@@ -86,16 +86,14 @@ public class Day04 extends Puzzle {
     );
   }
 
-  private static List<String> parseToIdentification(List<String> input, List<String> acc) {
-    return input.isEmpty() ? acc : parseToIdentification(
-        input.dropUntil(String::isBlank).tailOption().getOrElse(List.empty()),
-        acc.prepend(input.takeUntil(String::isBlank).map(stringAppend(" ")).reduce(String::concat))
-    );
+  private static String toIdentification(List<String> input) {
+    return input.map(stringAppend(" ")).reduce(String::concat);
   }
 
   @Override
   public Integer part1() {
-    return parseToIdentification(originalInput, List.empty())
+    return chunkedByBlankLines(originalInput)
+        .map(Day04::toIdentification)
         .filter(Day04::validatePassportKeys)
         .size();
   }
@@ -103,7 +101,8 @@ public class Day04 extends Puzzle {
 
   @Override
   public Integer part2() {
-    return parseToIdentification(originalInput, List.empty())
+    return chunkedByBlankLines(originalInput)
+        .map(Day04::toIdentification)
         .map(Day04::toKeyValue)
         .filter(isValidPassport)
         .size();
