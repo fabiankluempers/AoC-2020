@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import static java.util.function.Predicate.*;
 import static de.fabian.kluempers.aoc_2020.Functions.*;
-public class Day01 extends Puzzle<Integer, Integer> {
+public class Day01 extends Puzzle {
   public Day01(io.vavr.collection.List<String> originalInput) {
     super(originalInput);
   }

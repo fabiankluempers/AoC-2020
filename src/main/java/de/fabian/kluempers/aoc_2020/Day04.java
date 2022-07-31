@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import static de.fabian.kluempers.aoc_2020.Functions.*;
 import static de.fabian.kluempers.aoc_2020.Range.from;
 
-public class Day04 extends Puzzle<Integer, Integer> {
+public class Day04 extends Puzzle {
 
   public Day04(List<String> originalInput) {
     super(originalInput);
@@ -67,7 +67,7 @@ public class Day04 extends Puzzle<Integer, Integer> {
 
   private static boolean validateHeight(String height) {
     var matcher = HEIGHT_PATTERN.matcher(height);
-    if (matcher.find()) {
+    if (matcher.matches()) {
       int value = Integer.parseInt(matcher.group(1));
       String unit = matcher.group(2);
       return switch (unit) {

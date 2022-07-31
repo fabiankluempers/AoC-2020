@@ -2,7 +2,7 @@ package de.fabian.kluempers.aoc_2020;
 
 import io.vavr.collection.List;
 
-public class Day03 extends Puzzle<Long, Long> {
+public class Day03 extends Puzzle {
   public Day03(List<String> originalInput) {
     super(originalInput);
   }

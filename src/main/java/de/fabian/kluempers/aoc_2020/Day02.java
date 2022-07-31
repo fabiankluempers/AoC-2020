@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 import static java.util.function.Predicate.*;
 
-public class Day02 extends Puzzle<Integer, Integer> {
+public class Day02 extends Puzzle {
 
   public Day02(List<String> originalInput) {
     super(originalInput);

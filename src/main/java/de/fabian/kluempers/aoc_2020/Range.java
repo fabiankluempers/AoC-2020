@@ -2,6 +2,7 @@ package de.fabian.kluempers.aoc_2020;
 
 import java.util.Iterator;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 public record Range(int lower, int upper) implements Iterable<Integer> {
   public static Predicate<Integer> inRange(Range range) {
@@ -14,6 +15,10 @@ public record Range(int lower, int upper) implements Iterable<Integer> {
 
   public static RangeBuilder from(int lower) {
     return new RangeBuilder(lower);
+  }
+
+  public IntStream intStream() {
+    return IntStream.range(lower, upper + 1);
   }
 
   public final static class RangeBuilder {

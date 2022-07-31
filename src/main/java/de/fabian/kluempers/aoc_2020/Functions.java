@@ -3,7 +3,9 @@ package de.fabian.kluempers.aoc_2020;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 public record Functions() {
@@ -11,6 +13,10 @@ public record Functions() {
 
   public static F<String, String> stringAppend(String suffix) {
     return prefix -> prefix + suffix;
+  }
+
+  public static void check(boolean condition, Supplier<String> lazyMessage) {
+    if (!condition) throw new IllegalStateException(lazyMessage.get());
   }
 
   @SafeVarargs
