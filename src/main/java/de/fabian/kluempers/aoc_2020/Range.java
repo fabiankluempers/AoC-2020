@@ -21,6 +21,10 @@ public record Range(int lower, int upper) implements Iterable<Integer> {
     return IntStream.range(lower, upper + 1);
   }
 
+  public int size() {
+    return upper - lower;
+  }
+
   public final static class RangeBuilder {
     private final int lower;
 

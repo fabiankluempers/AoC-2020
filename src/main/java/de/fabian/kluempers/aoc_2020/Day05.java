@@ -14,12 +14,13 @@ import static de.fabian.kluempers.aoc_2020.Functions.check;
 public class Day05 extends Puzzle {
   private final List<Integer> seatIds;
 
-  private static final Range SEAT_ID_RANGE = Range.from(0).to(127 * 8 + 7);
   private static final Pattern INPUT_PATTERN = Pattern.compile("([FB]{7})([LR]{3})");
 
   private static final Range ROW_RANGE = Range.from(0).until(128);
 
   private static final Range COL_RANGE = Range.from(0).until(8);
+
+  private static final Range SEAT_ID_RANGE = Range.from(0).until(ROW_RANGE.size() * COL_RANGE.size()) ;
 
   private static Range lowerHalf(Range range) {
     return Range.from(range.lower()).to(range.lower() + ((range.upper() - range.lower())) / 2);
