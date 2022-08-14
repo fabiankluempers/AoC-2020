@@ -23,20 +23,6 @@ public class Day09 extends Puzzle {
         .head();
   }
 
-  private static Predicate<Long> isValidMulResult(Set<Long> preamble) {
-    return number -> {
-      for (Long candidate : preamble) {
-        var divisionResult = number / candidate;
-        if (number % candidate == 0 &&
-            divisionResult != candidate &&
-            preamble.contains(divisionResult)) {
-          return true;
-        }
-      }
-      return false;
-    };
-  }
-
   private static boolean isValidAddResult(Set<Long> preamble, Long number) {
     for (Long candidate : preamble) {
       var subtractionResult = number - candidate;
