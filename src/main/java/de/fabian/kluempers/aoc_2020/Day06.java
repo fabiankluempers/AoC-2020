@@ -2,8 +2,7 @@ package de.fabian.kluempers.aoc_2020;
 
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
-
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
 import static de.fabian.kluempers.aoc_2020.Functions.chunkedByBlankLines;
@@ -13,9 +12,7 @@ public class Day06 extends Puzzle{
     super(originalInput);
   }
 
-  private static Function<List<String>, Integer> sizeOfAnswerSet(
-      BiFunction<HashSet<Character>, HashSet<Character>, HashSet<Character>> operation
-  ) {
+  private static Function<List<String>, Integer> sizeOfAnswerSet(BinaryOperator<HashSet<Character>> operation) {
     return answers -> answers
         .map(String::toCharArray)
         .map(HashSet::ofAll)
