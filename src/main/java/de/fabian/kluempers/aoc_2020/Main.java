@@ -4,9 +4,9 @@ import io.vavr.collection.List;
 
 public class Main {
   public static void main(String[] args) {
-    int day = 8;
+    int day = 9;
     List<String> input = InputReader.read(String.format("input/Day%02d.txt", day));
-    Puzzle puzzle = new Day08(input);
+    Puzzle puzzle = new Day09(input);
     System.out.println(puzzle.part1());
     System.out.println(puzzle.part2());
   }
