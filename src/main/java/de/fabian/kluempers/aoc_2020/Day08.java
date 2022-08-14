@@ -2,6 +2,7 @@ package de.fabian.kluempers.aoc_2020;
 
 import io.vavr.collection.List;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 
@@ -24,24 +25,57 @@ public class Day08 extends Puzzle {
 
   @Override
   public Object part1() {
-    var program = new ExecutableInstruction[originalInput.size()];
-    var iter = originalInput.iterator();
-    for (int index = 0; index < originalInput.size(); index++) {
-      program[index] = parseToInstruction(iter.next());
-    }
-    var executedInstructions = new HashSet<Integer>();
-    var pc = new ProgramCounter();
-    var acc = new Accumulator();
-    while (!executedInstructions.contains(pc.value)) {
-      executedInstructions.add(pc.value);
-      program[pc.value].execute(pc, acc);
-    }
-    return acc.value;
+    return executeProgram(createProgram(originalInput)).statusCode;
   }
 
   @Override
   public Object part2() {
+    var programs = new ArrayList<List<String>>();
+    for (int i = 0; i < originalInput.size(); i++) {
+      var program = originalInput.toJavaList();
+      program.set(i, flipInstruction(program.get(i)));
+      programs.add(List.ofAll(program));
+    }
+    for (List<String> program : programs) {
+      var result = executeProgram(createProgram(program));
+      if (result instanceof Success) {
+        return result.statusCode;
+      }
+    }
     return null;
+  }
+
+  private static String flipInstruction(String instruction) {
+    return instruction.startsWith("nop")
+        ? "jmp" + instruction.substring(3)
+        : instruction.startsWith("jmp")
+        ? "nop" + instruction.substring(3)
+        : instruction;
+  }
+
+  private static ExecutableInstruction[] createProgram(List<String> input) {
+    var program = new ExecutableInstruction[input.size()];
+    var iter = input.iterator();
+    for (int index = 0; index < input.size(); index++) {
+      program[index] = parseToInstruction(iter.next());
+    }
+    return program;
+  }
+
+  private static ExecutionResult executeProgram(ExecutableInstruction[] program) {
+    var executedInstructions = new HashSet<Integer>();
+    var pc = new ProgramCounter();
+    var acc = new Accumulator();
+    while (true) {
+      if (executedInstructions.contains(pc.value)) {
+        return new InfiniteLoop(acc.value);
+      }
+      if (pc.value == program.length - 1) {
+        return new Success(acc.value);
+      }
+      executedInstructions.add(pc.value);
+      program[pc.value].execute(pc, acc);
+    }
   }
 
   private static ExecutableInstruction parseToInstruction(String input) {
@@ -75,3 +109,24 @@ class Accumulator {
   int value;
 }
 
+sealed class ExecutionResult {
+  final int statusCode;
+
+  ExecutionResult(int statusCode) {
+    this.statusCode = statusCode;
+  }
+}
+
+final class Success extends ExecutionResult {
+
+  Success(int statusCode) {
+    super(statusCode);
+  }
+}
+
+final class InfiniteLoop extends ExecutionResult {
+
+  InfiniteLoop(int statusCode) {
+    super(statusCode);
+  }
+}
